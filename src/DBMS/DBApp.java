@@ -7,33 +7,70 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-
-import org.junit.Test;
+import DBMS.Table;
+//import org.junit.Test;
 
 public class DBApp
 {
-	static int dataPageSize = -100;
-	
-	public static void createTable(String tableName, String[] columnsNames)
-	{
-		
+	public static int dataPageSize = 2;
+	static ArrayList<Table> tables = new ArrayList<Table>();
+
+
+	public static void createTable(String tableName, String[] columnsNames) {
+		for (int i = 0; i < tables.size(); i++) {
+			Table currentTable = tables.get(i);
+			if (currentTable.getTableName().equals(tableName)) {
+				System.out.println("Table '" + tableName + "' already exists.");
+				return;
+			}
+		}
+
+		Table newTable = new Table(tableName, columnsNames);
+		newTable.setTrace("Table created name:" + tableName + ", columnsNames:" + Arrays.toString(columnsNames));
+		tables.add(newTable);
+//		System.out.println("Table '" + tableName + "' created successfully.");
 	}
 	
 	public static void insert(String tableName, String[] record)
 	{
 		
 	}
-	
-	public static ArrayList<String []> select(String tableName)
-	{
-		
-		return new ArrayList<String[]>();
+
+	public static ArrayList<String[]> select(String tableName) {
+		int StartTime = (int) System.currentTimeMillis();
+		ArrayList <String[]> results = new ArrayList<String[]>();
+		Table table = FileManager.loadTable(tableName);
+		if (table == null) {
+			return null;
+		}
+		for ( int i = 0; i < table.pagesCount; i++) {
+			Page page = FileManager.loadTablePage(tableName, i);
+			for (String[] record : page.getRecords()) {
+				results.add(record);
+			}
+
+		}
+		int EndTime = (int) System.currentTimeMillis();
+		int ExecutionTime = EndTime - StartTime;
+		table.setTrace("Select all " + "Pages " + table.pagesCount + " Record " + table.recordNumbers+ " Execution Time: " + ExecutionTime
+				+ " (ms)");
+		return results;
 	}
-	
-	public static ArrayList<String []> select(String tableName, int pageNumber, int recordNumber)
-	{
-		
-		return new ArrayList<String[]>();
+
+	public static ArrayList<String[]> select(String tableName, int pageNumber, int recordNumber) {
+		int StartTime = (int) System.currentTimeMillis();
+		ArrayList <String[]> results = new ArrayList<String[]>();
+		Table table = FileManager.loadTable(tableName);
+		if (table == null) {
+			return null;
+		}
+		Page page = FileManager.loadTablePage(tableName, pageNumber);
+		results.addFirst(page.getRecord(recordNumber));
+		int EndTime = (int) System.currentTimeMillis();
+		int ExecutionTime = EndTime - StartTime;
+		table.setTrace("Select pointer page:" + (table.pagesCount-1) + " Record :" + (table.recordNumbers-1)+" total output count:1"+ " Execution Time: " + ExecutionTime
+				+ " (ms)");
+		return results;
 	}
 	
 	public static ArrayList<String []> select(String tableName, String[] cols, String[] vals)
@@ -44,21 +81,117 @@ public class DBApp
 	
 	public static String getFullTrace(String tableName)
 	{
-		
-		return "";
+//		String result = "Full Trace of the table:";
+		String result = "";
+		Table table = null;
+
+		for (Table tableTemp : tables) {
+			if (tableTemp.tableName.equals(tableName))
+				table = tableTemp;
+		}
+
+		if (table == null) {
+			return "Table not found";
+		}
+		else {
+			ArrayList<String> output = table.getTrace();
+			int counter = 0;
+			for (String str : output) {
+				if(counter == 0) {
+					result += str;
+				}
+				else {
+					result += "\n" + str;
+				}
+			}
+
+			result += "\n" + "Pages Count: " + table.pagesCount + ", Records Count: " + table.recordNumbers;
+//			result += "\n" + "--------------------------------";
+		}
+		return result;
 	}
 	
 	public static String getLastTrace(String tableName)
 	{
-		
-		return "";
+//		String result = "Last Trace of the table:";
+		String result = "";
+		Table table = null;
+
+		for (Table tableTemp : tables) {
+			if (tableTemp.tableName.equals(tableName))
+				table = tableTemp;
+		}
+
+		if (table == null) {
+			return "Table not found";
+		}
+		else {
+			ArrayList<String> output = table.getTrace();
+			if (output.size() == 0) {
+				return "No trace available";
+			}
+			else {
+				result += output.getLast();
+//				result += "\n" + "--------------------------------";
+			}
+		}
+		return result;
 	}
-	
 	
 	public static void main(String []args) throws IOException
 	{
-		
-		
+		String[] cols = {"id","name","major","semester","gpa"};
+		createTable("student", cols);
+//		String[] r1 = {"1", "stud1", "CS", "5", "0.9"};
+//		insert("student", r1);
+//		String[] r2 = {"2", "stud2", "BI", "7", "1.2"};
+//		insert("student", r2);
+//		String[] r3 = {"3", "stud3", "CS", "2", "2.4"};
+//		insert("student", r3);
+//		String[] r4 = {"4", "stud4", "DMET", "9", "1.2"};
+//		insert("student", r4);
+//		String[] r5 = {"5", "stud5", "BI", "4", "3.5"};
+//		insert("student", r5);
+//		System.out.println("Output of selecting the whole table content:");
+//		ArrayList<String[]> result1 = select("student");
+//		for (String[] array : result1) {
+//			for (String str : array) {
+//				System.out.print(str + " ");
+//			}
+//			System.out.println();
+//		}
+//		System.out.println("--------------------------------");
+//		System.out.println("Output of selecting the output by position:");
+//		ArrayList<String[]> result2 = select("student", 1, 1);
+//		for (String[] array : result2) {
+//			for (String str : array) {
+//				System.out.print(str + " ");
+//			}
+//			System.out.println();
+//		}
+//		System.out.println("--------------------------------");
+//		System.out.println("Output of selecting the output by column condition:");
+//		ArrayList<String[]> result3 = select("student", new String[]{"gpa"}, new
+//				String[]{"1.2"});
+//		for (String[] array : result3) {
+//			for (String str : array) {
+//				System.out.print(str + " ");
+//			}
+//			System.out.println();
+//		}
+		System.out.println("--------------------------------");
+		System.out.println("Full Trace of the table:");
+		System.out.println(getFullTrace("student"));
+		System.out.println("--------------------------------");
+		System.out.println("Last Trace of the table:");
+		System.out.println(getLastTrace("student"));
+		System.out.println("--------------------------------");
+		System.out.println("The trace of the Tables Folder:");
+		System.out.println(FileManager.trace());
+		FileManager.reset();
+		System.out.println("--------------------------------");
+		System.out.println("The trace of the Tables Folder after resetting:");
+		System.out.println(FileManager.trace());
 	}
 	
 	
