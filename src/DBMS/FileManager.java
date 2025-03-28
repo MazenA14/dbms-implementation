@@ -13,7 +13,7 @@ public class FileManager
 {
 	
 	static String path = FileManager.class.getResource("FileManager.class").toString();
-    static File directory = new File(path.substring(6,path.length()-17) + File.separator 
+	static File directory = new File(path.substring(6,path.length()-17) + File.separator
     		+ "Tables" + File.separator);
 	
     public static boolean storeTable(String tableName, Table t)

@@ -28,6 +28,7 @@ public class DBApp
 		Table newTable = new Table(tableName, columnsNames);
 		newTable.setTrace("Table created name:" + tableName + ", columnsNames:" + Arrays.toString(columnsNames));
 		tables.add(newTable);
+		FileManager.storeTable(tableName, newTable);
 //		System.out.println("Table '" + tableName + "' created successfully.");
 	}
 	
