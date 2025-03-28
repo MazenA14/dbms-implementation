@@ -11,7 +11,7 @@ public class DBAppTests
 	public void test0TableFolderCreationDBApp() throws Exception
 	{
 		FileManager.reset();
-	
+
 		String[] cols0 = {"g478b","v2ywj"};
 		DBApp.createTable("sr", cols0);
 		String fileManagerTrace0 = FileManager.trace();
@@ -28,14 +28,14 @@ public class DBAppTests
 		DBApp.createTable("iuc", cols3);
 		String fileManagerTrace3 = FileManager.trace();
 		assertTrue("A folder should be created for each table.", fileManagerTrace3.contains("iuc"));
-	
+
 		FileManager.reset();
 	}
 	@Test(timeout = 10000)
 	public void test0TableSerializationDBApp() throws Exception
 	{
 		FileManager.reset();
-	
+
 		String[] cols0 = {"v53"};
 		DBApp.createTable("d3sh", cols0);
 		String fileManagerTrace0 = FileManager.trace();
@@ -56,14 +56,14 @@ public class DBAppTests
 		DBApp.createTable("ae", cols4);
 		String fileManagerTrace4 = FileManager.trace();
 		assertTrue("A folder should be created for each table.", fileManagerTrace4.contains("ae.db"));
-	
+
 		FileManager.reset();
 	}
 	@Test(timeout = 10000)
 	public void test0TableTraceDBApp() throws Exception
 	{
 		FileManager.reset();
-	
+
 		String[] cols0 = {"inbp9","xn87","v6vg"};
 		DBApp.createTable("h06h", cols0);
 		String tableTrace0 = DBApp.getLastTrace("h06h");
@@ -80,14 +80,14 @@ public class DBAppTests
 		{
 			assertTrue("The trace String inside a table should contain its columns names.", tableTrace1.contains(cols1[i]));
 		}
-	
+
 		FileManager.reset();
 	}
 	@Test(timeout = 1000000)
 	public void test0TableInsertionPageSerializationDBApp() throws Exception
 	{
 		FileManager.reset();
-	
+
 		String[] cols0 = {"o8","v6","f4k7z","l4z","g3897","dbm","m7s"};
 		DBApp.createTable("n01", cols0);
 		for(int i=0;i<67;i++)
@@ -172,14 +172,14 @@ public class DBAppTests
 			String pagesTraceString_q0x8 = "q0x8{ " + String.join(" ",res_q0x8);	String fileManagerTrace3 = FileManager.trace();
 		assertTrue("Pages should be stored inside the folder of the table when records are in inserted.("+pagesTraceString_q0x8+")", fileManagerTrace3.contains(pagesTraceString_q0x8));
 		//--------------------------------------------------------------------------
-	
+
 		FileManager.reset();
 	}
 	@Test(timeout = 1000000)
 	public void test0TableInsertionPageTraceDBApp() throws Exception
 	{
 		FileManager.reset();
-	
+
 		String[] cols0 = {"z40"};
 		DBApp.createTable("q6x", cols0);
 		String [][] records_q6x = new String[80][cols0.length];
@@ -250,14 +250,14 @@ public class DBAppTests
 			assertTrue("Inserted records should appear in the table trace.("+Arrays.toString(records_r6p2[i])+")", tableTrace4.contains(Arrays.toString(records_r6p2[i])));
 		}
 		//--------------------------------------------------------------------------
-	
+
 		FileManager.reset();
 	}
 	@Test(timeout = 1000000)
 	public void test0TableInsertionSelectionDBApp() throws Exception
 	{
 		FileManager.reset();
-	
+
 		String[] cols0 = {"a","b","c","d"};
 		DBApp.createTable("z0p8", cols0);
 		String [][] records_z0p8 = new String[24][cols0.length];
@@ -275,14 +275,14 @@ public class DBAppTests
 			assertTrue("Inserted and selected records should be equivelent.", Arrays.toString(tableSelect0.get(i)).equals(Arrays.toString(records_z0p8[i])));
 		}
 		//--------------------------------------------------------------------------
-	
+
 		FileManager.reset();
 	}
 	@Test(timeout = 1000000)
 	public void test0TableInsertionSelectionTraceDBApp() throws Exception
 	{
 		FileManager.reset();
-	
+
 		String[] cols0 = {"a","b","c","d","e","f"};
 		DBApp.createTable("ooj88", cols0);
 		String [][] records_ooj88 = new String[26][cols0.length];
@@ -359,14 +359,14 @@ public class DBAppTests
 		assertTrue("Conditionless selection trace should report the number of records correctly.", selectTrace3.contains("records:"+54));
 		assertTrue("Conditionless selection trace should report the execution time.", selectTrace3.contains("execution time"));
 		//--------------------------------------------------------------------------
-	
+
 		FileManager.reset();
 	}
 	@Test(timeout = 1000000)
 	public void test0TableInsertionSelectionPointerDBApp() throws Exception
 	{
 		FileManager.reset();
-	
+
 		String[] cols0 = {"a","b"};
 		DBApp.createTable("v5g", cols0);
 		String [][] records_v5g = new String[5][cols0.length];
@@ -492,14 +492,14 @@ public class DBAppTests
 			}
 		}
 		//--------------------------------------------------------------------------
-	
+
 		FileManager.reset();
 	}
 	@Test(timeout = 1000000)
 	public void test0TableInsertionSelectionPointerTraceDBApp() throws Exception
 	{
 		FileManager.reset();
-	
+
 		String[] cols0 = {"a","b","c","d","e"};
 		DBApp.createTable("y4", cols0);
 		String [][] records_y4 = new String[92][cols0.length];
@@ -645,14 +645,14 @@ public class DBAppTests
 			}
 		}
 		//--------------------------------------------------------------------------
-	
+
 		FileManager.reset();
 	}
 	@Test(timeout = 1000000)
 	public void test0TableInsertionSelectionConditionDBApp() throws Exception
 	{
 		FileManager.reset();
-	
+
 		String[] cols0 = {"a","b","c"};
 		DBApp.createTable("rh", cols0);
 		String [][] records_rh = new String[161][cols0.length];
@@ -868,14 +868,14 @@ public class DBAppTests
 		assertTrue("Conditional selection should return the correct inserted record.", tableSelectStrings4.contains(Arrays.toString(new String[]{"a7","b1","c1","d3","e2"})));
 		assertTrue("Conditional selection should return the correct inserted record.", tableSelectStrings4.contains(Arrays.toString(new String[]{"a9","b1","c0","d1","e4"})));
 		//--------------------------------------------------------------------------
-	
+
 		FileManager.reset();
 	}
 	@Test(timeout = 1000000)
 	public void test0TableInsertionSelectionConditionTraceDBApp() throws Exception
 	{
 		FileManager.reset();
-	
+
 		String[] cols0 = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o"};
 		DBApp.createTable("ar", cols0);
 		String [][] records_ar = new String[227][cols0.length];
@@ -924,14 +924,14 @@ public class DBAppTests
 		assertTrue("Conditional selection trace should report the number of records correctly.", selectTrace0.contains("records:"+1));
 		assertTrue("Conditional selection trace should report the execution time.", selectTrace0.contains("execution time"));
 		//--------------------------------------------------------------------------
-	
+
 		FileManager.reset();
 	}
 	@Test(timeout = 1000000)
 	public void test0TableFullTraceDBApp() throws Exception
 	{
 		FileManager.reset();
-	
+
 		String[] cols0 = {"a","b","c","d","e","f","g","h","i"};
 		DBApp.createTable("rc5", cols0);
 		String [][] records_rc5 = new String[190][cols0.length];
@@ -944,17 +944,17 @@ public class DBAppTests
 			}
 			DBApp.insert("rc5", records_rc5[i]);
 		}
-	
+
 		int pageCount0 = (int)Math.ceil(190.0/DBApp.dataPageSize);
-	
+
 		 //performing 1 selects:
-	
+
 		int pageSelectPointer00 = genRandNum(pageCount0-1);
 		int recordSelectPointer00 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer00==pageCount0-1)
 			recordSelectPointer00 = genRandNum((190%DBApp.dataPageSize)-1);
 		DBApp.select("rc5", pageSelectPointer00,recordSelectPointer00);
-	
+
 		String selectTrace0 = DBApp.getFullTrace("rc5");
 		String[] selectTraceArray0 = selectTrace0.split("\n");
 		assertTrue("Full trace should show the correct number of operations performed on a table.", selectTraceArray0.length == 193);
@@ -972,67 +972,67 @@ public class DBAppTests
 			}
 			DBApp.insert("c6", records_c6[i]);
 		}
-	
+
 		int pageCount1 = (int)Math.ceil(39.0/DBApp.dataPageSize);
-	
+
 		 //performing 15 selects:
-	
+
 		DBApp.select("c6");
-	
+
 		int pageSelectPointer11 = genRandNum(pageCount1-1);
 		int recordSelectPointer11 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer11==pageCount1-1)
 			recordSelectPointer11 = genRandNum((39%DBApp.dataPageSize)-1);
 		DBApp.select("c6", pageSelectPointer11,recordSelectPointer11);
-	
+
 		int pageSelectPointer12 = genRandNum(pageCount1-1);
 		int recordSelectPointer12 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer12==pageCount1-1)
 			recordSelectPointer12 = genRandNum((39%DBApp.dataPageSize)-1);
 		DBApp.select("c6", pageSelectPointer12,recordSelectPointer12);
-	
+
 		DBApp.select("c6");
-	
+
 		DBApp.select("c6");
-	
+
 		DBApp.select("c6");
-	
+
 		String[] ConditionColumns16 = {"l"};
 		String[] ConditionColumnsValues16 = {"l6"};
 		DBApp.select("c6", ConditionColumns16, ConditionColumnsValues16);
-	
+
 		DBApp.select("c6");
-	
+
 		int pageSelectPointer18 = genRandNum(pageCount1-1);
 		int recordSelectPointer18 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer18==pageCount1-1)
 			recordSelectPointer18 = genRandNum((39%DBApp.dataPageSize)-1);
 		DBApp.select("c6", pageSelectPointer18,recordSelectPointer18);
-	
+
 		int pageSelectPointer19 = genRandNum(pageCount1-1);
 		int recordSelectPointer19 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer19==pageCount1-1)
 			recordSelectPointer19 = genRandNum((39%DBApp.dataPageSize)-1);
 		DBApp.select("c6", pageSelectPointer19,recordSelectPointer19);
-	
+
 		DBApp.select("c6");
-	
+
 		DBApp.select("c6");
-	
+
 		int pageSelectPointer112 = genRandNum(pageCount1-1);
 		int recordSelectPointer112 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer112==pageCount1-1)
 			recordSelectPointer112 = genRandNum((39%DBApp.dataPageSize)-1);
 		DBApp.select("c6", pageSelectPointer112,recordSelectPointer112);
-	
+
 		int pageSelectPointer113 = genRandNum(pageCount1-1);
 		int recordSelectPointer113 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer113==pageCount1-1)
 			recordSelectPointer113 = genRandNum((39%DBApp.dataPageSize)-1);
 		DBApp.select("c6", pageSelectPointer113,recordSelectPointer113);
-	
+
 		DBApp.select("c6");
-	
+
 		String selectTrace1 = DBApp.getFullTrace("c6");
 		String[] selectTraceArray1 = selectTrace1.split("\n");
 		assertTrue("Full trace should show the correct number of operations performed on a table.", selectTraceArray1.length == 56);
@@ -1050,85 +1050,85 @@ public class DBAppTests
 			}
 			DBApp.insert("w0y", records_w0y[i]);
 		}
-	
+
 		int pageCount2 = (int)Math.ceil(382.0/DBApp.dataPageSize);
-	
+
 		 //performing 18 selects:
-	
+
 		int pageSelectPointer20 = genRandNum(pageCount2-1);
 		int recordSelectPointer20 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer20==pageCount2-1)
 			recordSelectPointer20 = genRandNum((382%DBApp.dataPageSize)-1);
 		DBApp.select("w0y", pageSelectPointer20,recordSelectPointer20);
-	
+
 		String[] ConditionColumns21 = {"f"};
 		String[] ConditionColumnsValues21 = {"f4"};
 		DBApp.select("w0y", ConditionColumns21, ConditionColumnsValues21);
-	
+
 		int pageSelectPointer22 = genRandNum(pageCount2-1);
 		int recordSelectPointer22 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer22==pageCount2-1)
 			recordSelectPointer22 = genRandNum((382%DBApp.dataPageSize)-1);
 		DBApp.select("w0y", pageSelectPointer22,recordSelectPointer22);
-	
+
 		String[] ConditionColumns23 = {"d"};
 		String[] ConditionColumnsValues23 = {"d3"};
 		DBApp.select("w0y", ConditionColumns23, ConditionColumnsValues23);
-	
+
 		int pageSelectPointer24 = genRandNum(pageCount2-1);
 		int recordSelectPointer24 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer24==pageCount2-1)
 			recordSelectPointer24 = genRandNum((382%DBApp.dataPageSize)-1);
 		DBApp.select("w0y", pageSelectPointer24,recordSelectPointer24);
-	
+
 		DBApp.select("w0y");
-	
+
 		DBApp.select("w0y");
-	
+
 		DBApp.select("w0y");
-	
+
 		int pageSelectPointer28 = genRandNum(pageCount2-1);
 		int recordSelectPointer28 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer28==pageCount2-1)
 			recordSelectPointer28 = genRandNum((382%DBApp.dataPageSize)-1);
 		DBApp.select("w0y", pageSelectPointer28,recordSelectPointer28);
-	
+
 		String[] ConditionColumns29 = {"b","e","d","g"};
 		String[] ConditionColumnsValues29 = {"b1","e0","d3","g6"};
 		DBApp.select("w0y", ConditionColumns29, ConditionColumnsValues29);
-	
+
 		int pageSelectPointer210 = genRandNum(pageCount2-1);
 		int recordSelectPointer210 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer210==pageCount2-1)
 			recordSelectPointer210 = genRandNum((382%DBApp.dataPageSize)-1);
 		DBApp.select("w0y", pageSelectPointer210,recordSelectPointer210);
-	
+
 		int pageSelectPointer211 = genRandNum(pageCount2-1);
 		int recordSelectPointer211 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer211==pageCount2-1)
 			recordSelectPointer211 = genRandNum((382%DBApp.dataPageSize)-1);
 		DBApp.select("w0y", pageSelectPointer211,recordSelectPointer211);
-	
+
 		int pageSelectPointer212 = genRandNum(pageCount2-1);
 		int recordSelectPointer212 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer212==pageCount2-1)
 			recordSelectPointer212 = genRandNum((382%DBApp.dataPageSize)-1);
 		DBApp.select("w0y", pageSelectPointer212,recordSelectPointer212);
-	
+
 		DBApp.select("w0y");
-	
+
 		DBApp.select("w0y");
-	
+
 		DBApp.select("w0y");
-	
+
 		DBApp.select("w0y");
-	
+
 		int pageSelectPointer217 = genRandNum(pageCount2-1);
 		int recordSelectPointer217 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer217==pageCount2-1)
 			recordSelectPointer217 = genRandNum((382%DBApp.dataPageSize)-1);
 		DBApp.select("w0y", pageSelectPointer217,recordSelectPointer217);
-	
+
 		String selectTrace2 = DBApp.getFullTrace("w0y");
 		String[] selectTraceArray2 = selectTrace2.split("\n");
 		assertTrue("Full trace should show the correct number of operations performed on a table.", selectTraceArray2.length == 402);
@@ -1146,61 +1146,61 @@ public class DBAppTests
 			}
 			DBApp.insert("n9", records_n9[i]);
 		}
-	
+
 		int pageCount3 = (int)Math.ceil(117.0/DBApp.dataPageSize);
-	
+
 		 //performing 9 selects:
-	
+
 		String[] ConditionColumns30 = {"c"};
 		String[] ConditionColumnsValues30 = {"c2"};
 		DBApp.select("n9", ConditionColumns30, ConditionColumnsValues30);
-	
+
 		String[] ConditionColumns31 = {"c"};
 		String[] ConditionColumnsValues31 = {"c1"};
 		DBApp.select("n9", ConditionColumns31, ConditionColumnsValues31);
-	
+
 		DBApp.select("n9");
-	
+
 		int pageSelectPointer33 = genRandNum(pageCount3-1);
 		int recordSelectPointer33 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer33==pageCount3-1)
 			recordSelectPointer33 = genRandNum((117%DBApp.dataPageSize)-1);
 		DBApp.select("n9", pageSelectPointer33,recordSelectPointer33);
-	
+
 		DBApp.select("n9");
-	
+
 		String[] ConditionColumns35 = {"c"};
 		String[] ConditionColumnsValues35 = {"c1"};
 		DBApp.select("n9", ConditionColumns35, ConditionColumnsValues35);
-	
+
 		DBApp.select("n9");
-	
+
 		String[] ConditionColumns37 = {"c"};
 		String[] ConditionColumnsValues37 = {"c2"};
 		DBApp.select("n9", ConditionColumns37, ConditionColumnsValues37);
-	
+
 		int pageSelectPointer38 = genRandNum(pageCount3-1);
 		int recordSelectPointer38 = genRandNum(DBApp.dataPageSize-1);
 		if(pageSelectPointer38==pageCount3-1)
 			recordSelectPointer38 = genRandNum((117%DBApp.dataPageSize)-1);
 		DBApp.select("n9", pageSelectPointer38,recordSelectPointer38);
-	
+
 		String selectTrace3 = DBApp.getFullTrace("n9");
 		String[] selectTraceArray3 = selectTrace3.split("\n");
 		assertTrue("Full trace should show the correct number of operations performed on a table.", selectTraceArray3.length == 128);
 		assertTrue("Last line in the full trace should report the number of pages and records correctly.", selectTraceArray3[selectTraceArray3.length-1].equals("Pages Count: "+pageCount3+", Records Count: 117"));
 		//--------------------------------------------------------------------------
-	
+
 		FileManager.reset();
 	}
 
 
 
-	private static int genRandNum(int max) 
+	private static int genRandNum(int max)
 	{
 		return (int) (Math.random() * max) + 1;
 	}
-	private static String genRandString() 
+	private static String genRandString()
 	{
 		char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 		char[] digits = "0123456789".toCharArray();

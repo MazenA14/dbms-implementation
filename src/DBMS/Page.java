@@ -15,7 +15,7 @@ public class Page implements Serializable
         this.pageNumber = pageNumber;
         this.records = new ArrayList<String[]>();
         this.recordCount = records.size();
-        this.pageSize = DBApp.dataPageSize;;
+        this.pageSize = DBApp.dataPageSize;
         this.tableName = tableName;
     }
     public String[] getRecord(int recordIndex ) {

@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import DBMS.Table;
-//import org.junit.Test;
+import org.junit.Test;
 
 public class DBApp
 {
@@ -31,10 +31,47 @@ public class DBApp
 		FileManager.storeTable(tableName, newTable);
 //		System.out.println("Table '" + tableName + "' created successfully.");
 	}
-	
-	public static void insert(String tableName, String[] record)
-	{
-		
+
+	public static void insert(String tableName, String[] record) {
+		int StartTime = (int) System.currentTimeMillis();
+		Table table = FileManager.loadTable(tableName);
+		if (table == null) {
+			System.out.println("Table not found!");
+			return;
+		}
+		int pagesCount2 = table.getPagesCount();
+		Page lastpage;
+
+		// Enters only once, first time
+		if (pagesCount2 == -1) {
+			lastpage = new Page(0, tableName, dataPageSize);
+			lastpage.addRecord(record);
+			lastpage.recordCount++;
+			FileManager.storeTablePage(tableName, lastpage.pageNumber, lastpage);
+			table.pagesCount = 0;
+		} else {
+			lastpage = FileManager.loadTablePage(tableName, table.pagesCount);
+			if (lastpage.recordCount == dataPageSize) {
+				lastpage = new Page(lastpage.pageNumber + 1, tableName, dataPageSize);
+				lastpage.addRecord(record);
+				lastpage.recordCount++;
+				FileManager.storeTablePage(tableName, lastpage.pageNumber, lastpage);
+				table.pagesCount++;
+			} else {
+				lastpage.addRecord(record);
+				lastpage.recordCount++;
+				FileManager.storeTablePage(tableName, lastpage.pageNumber, lastpage);
+			}
+		}
+
+		table.recordNumbers++;
+		table.setPages(lastpage);
+		FileManager.storeTable(tableName, table);
+
+		int EndTime = (int) System.currentTimeMillis();
+		int ExecutionTime = EndTime - StartTime;
+		table.setTrace("Inserted:" + Arrays.toString(record) + ", at page number:" + table.getPagesCount() + ", ExecutionTime " + ExecutionTime);
+		FileManager.storeTable(tableName, table);
 	}
 
 	public static ArrayList<String[]> select(String tableName) {
@@ -53,8 +90,9 @@ public class DBApp
 		}
 		int EndTime = (int) System.currentTimeMillis();
 		int ExecutionTime = EndTime - StartTime;
-		table.setTrace("Select all " + "Pages " + table.pagesCount + " Record " + table.recordNumbers+ " Execution Time: " + ExecutionTime
+		table.setTrace("Select all " + "Pages " + (table.pagesCount + 1) + " Record " + table.recordNumbers+ " Execution Time: " + ExecutionTime
 				+ " (ms)");
+		FileManager.storeTable(tableName, table);
 		return results;
 	}
 
@@ -69,8 +107,9 @@ public class DBApp
 		results.addFirst(page.getRecord(recordNumber));
 		int EndTime = (int) System.currentTimeMillis();
 		int ExecutionTime = EndTime - StartTime;
-		table.setTrace("Select pointer page:" + (table.pagesCount-1) + " Record :" + (table.recordNumbers-1)+" total output count:1"+ " Execution Time: " + ExecutionTime
+		table.setTrace("Select pointer page:" + (table.pagesCount-1) + " Record: " + (recordNumber)+" total output count:1"+ " Execution Time: " + ExecutionTime
 				+ " (ms)");
+		FileManager.storeTable(tableName, table);
 		return results;
 	}
 	
@@ -84,12 +123,8 @@ public class DBApp
 	{
 //		String result = "Full Trace of the table:";
 		String result = "";
-		Table table = null;
 
-		for (Table tableTemp : tables) {
-			if (tableTemp.tableName.equals(tableName))
-				table = tableTemp;
-		}
+		Table table = FileManager.loadTable(tableName);
 
 		if (table == null) {
 			return "Table not found";
@@ -100,13 +135,14 @@ public class DBApp
 			for (String str : output) {
 				if(counter == 0) {
 					result += str;
+					counter++;
 				}
 				else {
 					result += "\n" + str;
 				}
 			}
 
-			result += "\n" + "Pages Count: " + table.pagesCount + ", Records Count: " + table.recordNumbers;
+			result += "\n" + "Pages Count: " + (table.pagesCount + 1) + ", Records Count: " + table.recordNumbers;
 //			result += "\n" + "--------------------------------";
 		}
 		return result;
@@ -116,12 +152,8 @@ public class DBApp
 	{
 //		String result = "Last Trace of the table:";
 		String result = "";
-		Table table = null;
 
-		for (Table tableTemp : tables) {
-			if (tableTemp.tableName.equals(tableName))
-				table = tableTemp;
-		}
+		Table table = FileManager.loadTable(tableName);
 
 		if (table == null) {
 			return "Table not found";
@@ -143,34 +175,34 @@ public class DBApp
 	{
 		String[] cols = {"id","name","major","semester","gpa"};
 		createTable("student", cols);
-//		String[] r1 = {"1", "stud1", "CS", "5", "0.9"};
-//		insert("student", r1);
-//		String[] r2 = {"2", "stud2", "BI", "7", "1.2"};
-//		insert("student", r2);
-//		String[] r3 = {"3", "stud3", "CS", "2", "2.4"};
-//		insert("student", r3);
-//		String[] r4 = {"4", "stud4", "DMET", "9", "1.2"};
-//		insert("student", r4);
-//		String[] r5 = {"5", "stud5", "BI", "4", "3.5"};
-//		insert("student", r5);
-//		System.out.println("Output of selecting the whole table content:");
-//		ArrayList<String[]> result1 = select("student");
-//		for (String[] array : result1) {
-//			for (String str : array) {
-//				System.out.print(str + " ");
-//			}
-//			System.out.println();
-//		}
-//		System.out.println("--------------------------------");
-//		System.out.println("Output of selecting the output by position:");
-//		ArrayList<String[]> result2 = select("student", 1, 1);
-//		for (String[] array : result2) {
-//			for (String str : array) {
-//				System.out.print(str + " ");
-//			}
-//			System.out.println();
-//		}
-//		System.out.println("--------------------------------");
+		String[] r1 = {"1", "stud1", "CS", "5", "0.9"};
+		insert("student", r1);
+		String[] r2 = {"2", "stud2", "BI", "7", "1.2"};
+		insert("student", r2);
+		String[] r3 = {"3", "stud3", "CS", "2", "2.4"};
+		insert("student", r3);
+		String[] r4 = {"4", "stud4", "DMET", "9", "1.2"};
+		insert("student", r4);
+		String[] r5 = {"5", "stud5", "BI", "4", "3.5"};
+		insert("student", r5);
+		System.out.println("Output of selecting the whole table content:");
+		ArrayList<String[]> result1 = select("student");
+		for (String[] array : result1) {
+			for (String str : array) {
+				System.out.print(str + " ");
+			}
+			System.out.println();
+		}
+		System.out.println("--------------------------------");
+		System.out.println("Output of selecting the output by position:");
+		ArrayList<String[]> result2 = select("student", 1, 1);
+		for (String[] array : result2) {
+			for (String str : array) {
+				System.out.print(str + " ");
+			}
+			System.out.println();
+		}
+		System.out.println("--------------------------------");
 //		System.out.println("Output of selecting the output by column condition:");
 //		ArrayList<String[]> result3 = select("student", new String[]{"gpa"}, new
 //				String[]{"1.2"});
@@ -194,7 +226,5 @@ public class DBApp
 		System.out.println("The trace of the Tables Folder after resetting:");
 		System.out.println(FileManager.trace());
 	}
-	
-	
-	
+
 }

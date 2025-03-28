@@ -18,7 +18,7 @@ public class Table implements Serializable
         this.recordNumbers = 0;
         this.tableName = tableName;
         this.columnsNames = columnsNames;
-        this.pagesCount = 0;
+        this.pagesCount = -1;
         this.pages = new ArrayList<Page>();
         this.traceAll = new ArrayList<String>();
     }
@@ -33,6 +33,9 @@ public class Table implements Serializable
     }
     public int getPagesCount(){
         return  pagesCount;
+    }
+    public void setPages(Page page) {
+        pages.add(page);
     }
     public void setTrace(String trace) {
         traceAll.add(trace);
