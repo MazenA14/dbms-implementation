@@ -40,4 +40,7 @@ public class Table implements Serializable
     public void setTrace(String trace) {
         traceAll.add(trace);
     }
+    public void getColumnsNames(String[] columnsNames) {
+        this.columnsNames = columnsNames;
+    }
 }

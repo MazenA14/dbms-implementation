@@ -70,7 +70,7 @@ public class DBApp
 
 		int EndTime = (int) System.currentTimeMillis();
 		int ExecutionTime = EndTime - StartTime;
-		table.setTrace("Inserted:" + Arrays.toString(record) + ", at page number:" + table.getPagesCount() + ", ExecutionTime " + ExecutionTime);
+		table.setTrace("Inserted:" + Arrays.toString(record) + ", at page number:" + table.getPagesCount() + ", execution time: " + ExecutionTime);
 		FileManager.storeTable(tableName, table);
 	}
 
@@ -78,10 +78,12 @@ public class DBApp
 		int StartTime = (int) System.currentTimeMillis();
 		ArrayList <String[]> results = new ArrayList<String[]>();
 		Table table = FileManager.loadTable(tableName);
+		int pagesCount = 0;
 		if (table == null) {
 			return null;
 		}
-		for ( int i = 0; i < table.pagesCount; i++) {
+		for ( int i = 0; i <= table.pagesCount; i++) {
+			pagesCount += 1;
 			Page page = FileManager.loadTablePage(tableName, i);
 			for (String[] record : page.getRecords()) {
 				results.add(record);
@@ -90,7 +92,7 @@ public class DBApp
 		}
 		int EndTime = (int) System.currentTimeMillis();
 		int ExecutionTime = EndTime - StartTime;
-		table.setTrace("Select all " + "Pages " + (table.pagesCount + 1) + " Record " + table.recordNumbers+ " Execution Time: " + ExecutionTime
+		table.setTrace("Select all pages:" + pagesCount + " records:" + table.recordNumbers+ ", execution time: " + ExecutionTime
 				+ " (ms)");
 		FileManager.storeTable(tableName, table);
 		return results;
@@ -107,16 +109,94 @@ public class DBApp
 		results.addFirst(page.getRecord(recordNumber));
 		int EndTime = (int) System.currentTimeMillis();
 		int ExecutionTime = EndTime - StartTime;
-		table.setTrace("Select pointer page:" + (table.pagesCount-1) + " Record: " + (recordNumber)+" total output count:1"+ " Execution Time: " + ExecutionTime
+		table.setTrace("Select pointer page:" + pageNumber + " record:" + recordNumber +" total output count:1"+ ", execution time: " + ExecutionTime
 				+ " (ms)");
 		FileManager.storeTable(tableName, table);
 		return results;
 	}
 	
-	public static ArrayList<String []> select(String tableName, String[] cols, String[] vals)
-	{
-		
-		return new ArrayList<String[]>();
+	public static ArrayList<String []> select(String tableName, String[] cols, String[] vals) {
+		ArrayList<ArrayList<Integer>> outputTrace = new ArrayList<>();
+		int [] colIndex = new int[cols.length];
+		int matchCount = 0;
+		int totalMatchCount = 0;
+		boolean match = true;
+
+		int StartTime = (int) System.currentTimeMillis();
+
+		ArrayList <String[]> result = new ArrayList<String[]>();
+		Table table = FileManager.loadTable(tableName);
+		if (table == null) {
+			return null;
+		}
+		String[] colNames = table.getColumnsNames();
+		for (int i = 0; i < cols.length; i++) {
+			for (int j = 0; j < colNames.length; j++) {
+				if (cols[i].equals(colNames[j])) {
+					colIndex[i] = j;
+					break;
+				}
+			}
+		}
+
+		for (int i = 0; i <= table.pagesCount; i++) {
+			Page page = FileManager.loadTablePage(tableName, i);
+			page.getRecords().getFirst();
+			for (String[] record : page.getRecords()) {
+				match = true;
+				for (int j = 0; j < colIndex.length; j++) {
+					if(!record[colIndex[j]].equals(vals[j])) {
+						match = false;
+						break;
+					}
+				}
+				if (match) {
+					result.add(record);
+				}
+			}
+
+			if (match) {
+				matchCount++;
+				ArrayList<Integer> tempArray = new ArrayList<>();
+				tempArray.add(i);
+				tempArray.add(matchCount);
+				outputTrace.add(tempArray);
+			}
+
+			totalMatchCount += matchCount;
+			matchCount = 0;
+		}
+
+		String outputString = convert2DArrayListToString(outputTrace);
+		int EndTime = (int) System.currentTimeMillis();
+
+		int ExecutionTime = EndTime - StartTime;
+
+		table.setTrace("Select condition:" + Arrays.toString(cols) + "->" + Arrays.toString(vals) + ", Records per page:" + outputString + " records:" + totalMatchCount + " execution time: " + ExecutionTime
+				+ " (ms)");
+
+		FileManager.storeTable(tableName, table);
+		return result;
+	}
+
+	public static String convert2DArrayListToString(ArrayList<ArrayList<Integer>> arrayList) {
+		StringBuilder result = new StringBuilder("[");
+		for (int i = 0; i < arrayList.size(); i++) {
+			result.append("[");
+			ArrayList<Integer> innerList = arrayList.get(i);
+			for (int j = 0; j < innerList.size(); j++) {
+				result.append(innerList.get(j));
+				if (j < innerList.size() - 1) {
+					result.append(", ");
+				}
+			}
+			result.append("]");
+			if (i < arrayList.size() - 1) {
+				result.append(", ");
+			}
+		}
+		result.append("]");
+		return result.toString();
 	}
 	
 	public static String getFullTrace(String tableName)
@@ -203,15 +283,15 @@ public class DBApp
 			System.out.println();
 		}
 		System.out.println("--------------------------------");
-//		System.out.println("Output of selecting the output by column condition:");
-//		ArrayList<String[]> result3 = select("student", new String[]{"gpa"}, new
-//				String[]{"1.2"});
-//		for (String[] array : result3) {
-//			for (String str : array) {
-//				System.out.print(str + " ");
-//			}
-//			System.out.println();
-//		}
+		System.out.println("Output of selecting the output by column condition:");
+		ArrayList<String[]> result3 = select("student", new String[]{"gpa"}, new
+				String[]{"1.2"});
+		for (String[] array : result3) {
+			for (String str : array) {
+				System.out.print(str + " ");
+			}
+			System.out.println();
+		}
 		System.out.println("--------------------------------");
 		System.out.println("Full Trace of the table:");
 		System.out.println(getFullTrace("student"));
