@@ -151,12 +151,12 @@ public class DBApp
 					}
 				}
 				if (match) {
+					matchCount++;
 					result.add(record);
 				}
 			}
 
-			if (match) {
-				matchCount++;
+			if (matchCount > 0) {
 				ArrayList<Integer> tempArray = new ArrayList<>();
 				tempArray.add(i);
 				tempArray.add(matchCount);
